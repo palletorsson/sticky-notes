@@ -3,7 +3,7 @@
 // Error reporting
 error_reporting(E_ALL^E_NOTICE);
 
-require "../connect.php";
+require_once("../pdo_connect.php");
 
 // Validating the input data:
 if(!is_numeric($_GET['id']) || !is_numeric($_GET['x']) || !is_numeric($_GET['y']) || !is_numeric($_GET['z']))
@@ -16,7 +16,9 @@ $y = (int)$_GET['y'];
 $z = (int)$_GET['z'];
 
 // Saving the position and z-index of the note:
-mysql_query("UPDATE notes SET xyz='".$x."x".$y."x".$z."' WHERE id=".$id);
+$query = "UPDATE notes SET xyz='".$x."x".$y."x".$z."' WHERE id=:id";
+echo $query; 
+$binds = array(':id' => $id);
+executeQuery($query, $binds);
 
-echo "1";
 ?>

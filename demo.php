@@ -4,35 +4,39 @@
 error_reporting(E_ALL^E_NOTICE);
 
 // Including the DB connection file:
-require 'connect.php';
+require_once('pdo_connect.php');
+						
+$query = "SELECT * FROM notes ORDER BY id DESC";
 
-$query = mysql_query("SELECT * FROM notes ORDER BY id DESC");
+$result_set = executeQuery($query);
+$count = $result_set['affected_rows'];
+$result_set = $result_set['rows'];
 
 $notes = '';
 $left='';
 $top='';
 $zindex='';
 
-while($row=mysql_fetch_assoc($query))
-{
-	// The xyz column holds the position and z-index in the form 200x100x10:
-	list($left,$top,$zindex) = explode('x',$row['xyz']);
+foreach ($result_set as $key) {
+	
+// The xyz column holds the position and z-index in the form 200x100x10:
+	list($left,$top,$zindex) = explode('x',$key['xyz']);
 
 	$notes.= '
-	<div class="note '.$row['color'].'" style="left:'.$left.'px;top:'.$top.'px;z-index:'.$zindex.'">
-		'.htmlspecialchars($row['text']).'
-		<div class="author">'.htmlspecialchars($row['name']).'</div>
-		<span class="data">'.$row['id'].'</span>
+	<div class="note '.$key['color'].'" style="left:'.$left.'px;top:'.$top.'px;z-index:'.$zindex.'">
+		'.htmlspecialchars($key['text']).'
+		<div class="author">'.htmlspecialchars($key['name']).'</div>
+		<span class="data">'.$key['id'].'</span>
 	</div>';
+   
 }
-
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Sticky Notes With AJAX, PHP &amp; jQuery | Tutorialzine demo</title>
+<title>Sticky Notes</title>
 
 <link rel="stylesheet" type="text/css" href="styles.css" />
 <link rel="stylesheet" type="text/css" href="fancybox/jquery.fancybox-1.2.6.css" media="screen" />
@@ -66,6 +70,7 @@ while($row=mysql_fetch_assoc($query))
 	<a id="addButton" class="white" href="add_note.html">NEW</a>
     
 	<?php echo $notes?>
+	
 
 <div id="droppable" class="ui-widget-header">
 <p>Trash</p>
