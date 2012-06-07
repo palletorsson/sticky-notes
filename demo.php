@@ -27,7 +27,9 @@ foreach ($result_set as $key) {
 		'.htmlspecialchars($key['text']).'
 		<div class="author">'.htmlspecialchars($key['name']).'</div>
 		<span class="data">'.$key['id'].'</span>
-	</div>';
+		<a id="editMe" class="editMe" href="edit_note.php?id='.$key['id'].'">editMe</a>
+	</div>'
+	;
    
 }
 ?>
@@ -41,7 +43,6 @@ foreach ($result_set as $key) {
 <link rel="stylesheet" type="text/css" href="styles.css" />
 <link rel="stylesheet" type="text/css" href="fancybox/jquery.fancybox-1.2.6.css" media="screen" />
 
-
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 <script type="text/javascript" src="fancybox/jquery.fancybox-1.2.6.pack.js"></script>
@@ -51,19 +52,6 @@ foreach ($result_set as $key) {
 </head>
 
 <body>
-	<script>
-	$(function() {
-		$( "#draggable" ).draggable();
-		$( "#droppable" ).droppable({
-			drop: function( event, ui ) {
-				$( this )
-					.addClass( "ui-state-highlight" )
-					.find( "p" )
-					.html( "TRASH" );
-			}
-		});
-	});
-	</script>
 
 
 <div id="main">
@@ -72,9 +60,6 @@ foreach ($result_set as $key) {
 	<?php echo $notes?>
 	
 
-<div id="droppable" class="ui-widget-header">
-<p>Trash</p>
-</div>    
 </div>
 
 

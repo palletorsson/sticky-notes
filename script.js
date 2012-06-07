@@ -1,6 +1,9 @@
 	$(document).ready(function(){
 		/* This code is executed after the DOM has been completely loaded */
 
+$(".editme").click(function() {
+  alert("++");
+});
 		var tmp;
 		
 		$('.note').each(function(){
@@ -13,14 +16,15 @@
 		make_draggable($('.note'));
 		
 		/* Configuring the fancybox plugin for the "Add a note" button: */
-		$("#addButton").fancybox({
+		$("#addButton, #editMe").fancybox({
 			'zoomSpeedIn'		: 600,
 			'zoomSpeedOut'		: 500,
 			'easingIn'			: 'easeOutBack',
 			'easingOut'			: 'easeInBack',
 			'hideOnContentClick': false,
-			'padding'			: 15
+			'padding'			: 15	
 		});
+		
 		
 		/* Listening for keyup events on fields of the "Add a note" form: */
 		$('.pr-body,.pr-author').live('keyup',function(e){
@@ -39,8 +43,10 @@
 		});
 		
 		/* The submit button: */
-		$('#note-submit').live('click', function(e){
-			
+		$('#note-submit, #edit-submit').live('click', function(e){
+			var curr = $(this).attr('id');
+			var id = $(this).attr('name');
+			console.log(id);
 			if($('.pr-body').val().length<4)
 			{
 				alert("The note text is too short!")
@@ -59,7 +65,9 @@
 				'zindex'	: ++zIndex,
 				'body'		: $('.pr-body').val(),
 				'author'	: $('.pr-author').val(),
-				'color'		: $.trim($('#fancy_ajax .note').attr('class').replace('note',''))
+				'color'		: $.trim($('#fancy_ajax .note').attr('class').replace('note','')),
+				'submit'	: curr,
+				'id'		: id 
 			};
 			
 			
@@ -112,3 +120,5 @@
 		});
 
 	}
+	
+	
