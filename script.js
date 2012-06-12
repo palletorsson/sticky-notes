@@ -1,9 +1,26 @@
 	$(document).ready(function(){
 		/* This code is executed after the DOM has been completely loaded */
 
-$(".editme").click(function() {
-  alert("++");
-});
+		$(".close img").click(function() {
+			var agree=confirm("Are you sure you wish to delete this entry?");
+				if (agree) {
+					var id = $(this).parent().attr('id');
+					var data = {
+						'action' : 'delete', 
+						'id' : id 
+					};
+					console.log(data);
+					$.post('ajax/post.php', data, function(data) { 
+						$('#'+id).parent().hide();
+						
+					});
+					return true;
+				}
+				else
+					return false;
+		});
+		
+		
 		var tmp;
 		
 		$('.note').each(function(){
@@ -16,7 +33,7 @@ $(".editme").click(function() {
 		make_draggable($('.note'));
 		
 		/* Configuring the fancybox plugin for the "Add a note" button: */
-		$("#addButton, #editMe").fancybox({
+		$("#addButton, #editMe, #addCollection").fancybox({
 			'zoomSpeedIn'		: 600,
 			'zoomSpeedOut'		: 500,
 			'easingIn'			: 'easeOutBack',
@@ -42,8 +59,8 @@ $(".editme").click(function() {
 			$('#fancy_ajax .note').removeClass('yellow green blue').addClass($(this).attr('class').replace('color',''));
 		});
 		
-		/* The submit button: */
-		$('#note-submit, #edit-submit').live('click', function(e){
+		/* The submit note button: */
+		$('#note-submit, #edit-submit', '#collection-submit').live('click', function(e){
 			var curr = $(this).attr('id');
 			var id = $(this).attr('name');
 			console.log(id);
@@ -71,30 +88,38 @@ $(".editme").click(function() {
 			};
 			
 			
-			/* Sending an AJAX POST request: */
+			/* Sending an AJAX POST request: TODO: update edit*/
 			$.post('ajax/post.php',data,function(msg){
-				
-				if(parseInt(msg))
+				parseInt(msg);
+				if(curr == 'note-submit')
 				{
-				
+					
 					/* msg contains the ID of the note, assigned by MySQL's auto increment: */
 					
 					var tmp = $('#fancy_ajax .note').clone();
 					
-					tmp.find('span.data').text(msg).end().css({'z-index':zIndex,top:0,left:0});
+					tmp.find('span.data').text(msg).end().css({'z-index':zIndex,top:300,left:0});
 					tmp.appendTo($('#main'));
 						
 					make_draggable(tmp)
+				}else{
+					alert('hej');
+					console.log(msg);
+					console.log(data.body);
+					$(this).find('#text').text(data.body);
 				}
+				
 				
 				$("#addButton").fancybox.close();
 			});
 			
 			e.preventDefault();
 		})
+
 		
 		$('.note-form').submit(function(e){e.preventDefault();});
 	});
+
 
 	var zIndex = 0;
 

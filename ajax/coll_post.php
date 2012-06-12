@@ -7,11 +7,11 @@ require_once("../pdo_connect.php");
 
 
 /* Inserting a new record in the notes DB: */
-if($_POST['submit'] == 'note-submit'){
-	$in_query = " INSERT INTO notes (text, name, color, xyz)
-				VALUES (:body, :author, :color, :zindex)
+if(isset($_POST['submit'])){
+	$in_query = " INSERT INTO collection (name)
+				VALUES (:name)
 	";
-	$in_binds = array(':body' => $_POST['body'],':author' => $_POST['author'],':color' => $_POST['color'],':zindex' => '0x0x'.$_POST['zindex']);
+	$in_binds = array(':name' => $_POST['collection-name']);
 
 }else if($_POST['action'] == 'delete'){
 	$in_query = " DELETE FROM notes 
